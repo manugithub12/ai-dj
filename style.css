@@ -1,0 +1,106 @@
+.heading
+{
+    font-size: 23px;
+    width: 100%;
+    margin: 0px;
+}
+.note
+{
+    font-size: 15px;
+    color:black;
+}
+body
+{
+background-size: cover;
+}
+.div_speed
+{
+    float: left;
+}
+.div_speed_img
+{
+    width: 200px;
+    border-radius: 100px;
+}
+#speed
+{
+    font-size: 23px;
+    margin: 15px;
+}
+.div_volume
+{
+    float: right;
+}
+.div_volume_img
+{
+    width: 200px;
+    border-radius: 100px;
+}
+#volume
+{
+    font-size: 23px;
+    margin: 15px;
+}
+.play_button
+{
+    width: 130px;
+    font-size: 25px;
+}
+
+canvas
+{
+border:5px solid white;
+border-radius:20px;
+}
+
+song = "";
+leftWristX = 0;
+leftWristY = 0;
+rightWristX = 0;
+rightWristY = 0;
+
+function preload()
+{
+    song = loadSound("music.mp3");
+}
+
+function setup() {
+    canvas = createCanvas(600 ,500);
+    canvas.center();
+
+video = createCapture(VIDEO);
+video.hide();
+
+poseNet = ml5.poseNet(video, modelLoaded);
+poseNet.on('pose', gotPoses);
+}
+
+function modelLoaded() {
+    console.log('PoseNet Is Initialized');
+}
+
+function draw() {
+    image(video, 0, 0 600, 500);
+}
+
+function play()
+{
+    song.play();
+    song.setVolume(1);
+    song.rate(1);
+}
+
+function gotPoses(results)
+{
+    if(results.length > 0)
+    {
+        console.log(results);
+        leftWristX = results[0].pose.leftWrist.x;
+        leftWristY = results[0].pose.leftWrist.y;
+        console.log("leftWristX = " + leftWristX +"leftWristY = "+leftWristY);
+
+        rightWristX = results[0].pose.rightWrist.x;
+        rightWristY = results[0].pose.rightWrist.y;
+        console.log("rightWristX = " + rightWristX +"rightWristY = "+rightWristY);
+    }
+}
